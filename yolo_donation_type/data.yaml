@@ -1,0 +1,14 @@
+# Dataset configuration for Packaged Bakery Detection
+
+train: /work/mech-ai-scratch/anneka/food/YOLO_base/train.txt
+val: /work/mech-ai-scratch/anneka/food/YOLO_base/val.txt   # optional (recommended)
+test: /work/mech-ai-scratch/anneka/food/YOLO_base/test.txt # optional
+
+# Number of classes
+nc: 3
+
+# Class names
+names:
+  0: produce
+  1: packaged
+  2: bakery

@@ -1,0 +1,6 @@
+classes = 3
+train = /work/mech-ai-scratch/anneka/food/YOLO_base/train.txt
+valid = /work/mech-ai-scratch/anneka/food/YOLO_base/val.txt
+test = /work/mech-ai-scratch/anneka/food/YOLO_base/test.txt
+names = /work/mech-ai-scratch/anneka/food/YOLO_base/obj.names
+backup = /work/mech-ai-scratch/anneka/food/YOLO_base/backup/
