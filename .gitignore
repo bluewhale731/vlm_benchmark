@@ -4,3 +4,5 @@ __pycache__/
 logs/
 *.pt
 *.pth
+*.bak
+*.gtbak
