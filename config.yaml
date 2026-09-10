@@ -1,17 +1,21 @@
 datasets:
   donation_type:
     format: yolo
-    root: yolo_donation_type/obj_train_data_food_type
+    root: donation_type/obj_train_data
     splits: null
+    # head-to-head vs ResNet: uncomment after training the baseline
+    # subset_manifest: results/resnet_donation_type/test_manifest.txt
   defects:
     format: yolo
-    root: yolo_defect/obj_train_data
+    root: obj_train_data
     splits: null
+    # subset_manifest: results/resnet_defects/test_manifest.txt
   freshness:
     format: coco
-    root: yolo_produce/custom_produce
-    coco_json: yolo_produce/instances_default_produce.json
+    root: produce/custom_produce
+    coco_json: produce/instances_default_produce.json
     splits: null
+    # subset_manifest: results/resnet_freshness/test_manifest.txt
 
 paths:
   subset_manifest: null

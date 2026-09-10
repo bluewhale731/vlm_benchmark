@@ -184,7 +184,7 @@ def _read_yolo_classes(label_path: Path | None,
 
 
 def load_yolo_task(root: Path, task: str, splits: list[str] | None,
-                   data_yaml=None) -> list[Example]:
+                   data_yaml=None, exclude_fresh=False) -> list[Example]:
     names = _load_yolo_names(root, data_yaml)
     valid = TASK_CLASSES[task]
     all_known = {c for cls in TASK_CLASSES.values() for c in cls}
@@ -196,11 +196,19 @@ def load_yolo_task(root: Path, task: str, splits: list[str] | None,
     multi = task == "defects"
     severity = {c: i for i, c in enumerate(valid)}
     out = []
+    n_fresh_excluded = 0
     for img in _find_images(root, splits):
-        classes = [c for c in _read_yolo_classes(_yolo_label_path(img), names)
-                   if c in valid]
+        all_classes = _read_yolo_classes(_yolo_label_path(img), names)
+        classes = [c for c in all_classes if c in valid]
         rel = str(img.relative_to(root))
         if multi:
+            if exclude_fresh:
+                fr = [c for c in all_classes if c in FRESHNESS_CLASSES]
+                # drop images whose freshness annotation is fresh-only
+                # (no annotation at all -> keep; can't determine condition)
+                if fr and all(c == "fresh" for c in fr):
+                    n_fresh_excluded += 1
+                    continue
             out.append(Example(img, rel, labels=set(classes)))
         else:
             if not classes:
@@ -210,6 +218,9 @@ def load_yolo_task(root: Path, task: str, splits: list[str] | None,
             tied = [c for c, n in counts if n == top_n]
             label = max(tied, key=lambda c: severity[c])
             out.append(Example(img, rel, label=label))
+    if n_fresh_excluded:
+        print(f"[info] {task}: excluded {n_fresh_excluded} fresh-only "
+              f"images (exclude_fresh=true)")
     return out
 
 
@@ -307,16 +318,15 @@ def load_task(task: str, cfg: dict) -> list[Example]:
     fmt = dcfg["format"]
     splits = dcfg.get("splits")
     if fmt == "yolo":
-        ex = load_yolo_task(root, task, splits, dcfg.get("data_yaml"))
+        ex = load_yolo_task(root, task, splits, dcfg.get("data_yaml"),
+                            exclude_fresh=dcfg.get("exclude_fresh", False))
     elif fmt == "coco":
         ex = load_coco_task(root, task, dcfg.get("coco_json"), splits)
     elif fmt == "imagefolder":
         ex = load_imagefolder_task(root, task, splits)
     else:
         raise ValueError(f"Unknown dataset format '{fmt}' for task '{task}'")
-    manifest = dcfg.get("subset_manifest",
-                        cfg["paths"].get("subset_manifest"))
-    ex = apply_subset(ex, manifest)
+    ex = apply_subset(ex, cfg["paths"].get("subset_manifest"))
     if not ex:
         raise RuntimeError(f"No examples loaded for task '{task}' — check "
                            f"root, format, splits, and class names.")

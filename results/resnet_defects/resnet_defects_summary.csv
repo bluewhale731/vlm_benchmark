@@ -1,0 +1,7 @@
+model,task,class,sensitivity,specificity,precision,f1,support
+resnet18,defects,wrinkling,0.5000,1.0000,1.0000,0.6667,2
+resnet18,defects,visible_cut,0.5000,1.0000,1.0000,0.6667,2
+resnet18,defects,bruising,1.0000,1.0000,1.0000,1.0000,1
+resnet18,defects,discoloration,1.0000,0.9130,0.5000,0.6667,2
+resnet18,defects,leaking,0.0000,1.0000,0.0000,0.0000,0
+resnet18,defects,mold,1.0000,1.0000,1.0000,1.0000,1

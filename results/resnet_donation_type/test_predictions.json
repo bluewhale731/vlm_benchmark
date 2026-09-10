@@ -1,0 +1,632 @@
+[
+  {
+    "file_name": "images/101.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9996,
+      "produce": 0.0001,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/110.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9991,
+      "produce": 0.0006,
+      "bakery": 0.0004
+    }
+  },
+  {
+    "file_name": "images/111.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9988,
+      "produce": 0.0006,
+      "bakery": 0.0006
+    }
+  },
+  {
+    "file_name": "images/114.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9816,
+      "produce": 0.0146,
+      "bakery": 0.0038
+    }
+  },
+  {
+    "file_name": "images/118.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9993,
+      "produce": 0.0004,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/12.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9989,
+      "produce": 0.0006,
+      "bakery": 0.0005
+    }
+  },
+  {
+    "file_name": "images/130.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0003,
+      "produce": 0.9989,
+      "bakery": 0.0007
+    }
+  },
+  {
+    "file_name": "images/137.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0001,
+      "produce": 0.9997,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/145.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9996,
+      "bakery": 0.0004
+    }
+  },
+  {
+    "file_name": "images/161.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0001,
+      "produce": 0.9996,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/165.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9998,
+      "bakery": 0.0002
+    }
+  },
+  {
+    "file_name": "images/17.jpg",
+    "predicted": "packaged",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.9975,
+      "produce": 0.0012,
+      "bakery": 0.0013
+    }
+  },
+  {
+    "file_name": "images/187.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0001,
+      "produce": 0.9996,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/195.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9997,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/2.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9984,
+      "produce": 0.0009,
+      "bakery": 0.0007
+    }
+  },
+  {
+    "file_name": "images/217.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0013,
+      "produce": 0.9976,
+      "bakery": 0.0011
+    }
+  },
+  {
+    "file_name": "images/23.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9996,
+      "produce": 0.0001,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/239.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9997,
+      "bakery": 0.0002
+    }
+  },
+  {
+    "file_name": "images/240.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0001,
+      "produce": 0.9996,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/243.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0002,
+      "produce": 0.9988,
+      "bakery": 0.001
+    }
+  },
+  {
+    "file_name": "images/247.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0001,
+      "produce": 0.9993,
+      "bakery": 0.0006
+    }
+  },
+  {
+    "file_name": "images/255.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0001,
+      "produce": 0.9995,
+      "bakery": 0.0004
+    }
+  },
+  {
+    "file_name": "images/258.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9997,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/264.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9999,
+      "bakery": 0.0001
+    }
+  },
+  {
+    "file_name": "images/271.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0022,
+      "produce": 0.997,
+      "bakery": 0.0008
+    }
+  },
+  {
+    "file_name": "images/274.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9997,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/277.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9997,
+      "bakery": 0.0002
+    }
+  },
+  {
+    "file_name": "images/278.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9996,
+      "bakery": 0.0004
+    }
+  },
+  {
+    "file_name": "images/28.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9995,
+      "produce": 0.0002,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/286.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9997,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/288.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0,
+      "produce": 0.9989,
+      "bakery": 0.0011
+    }
+  },
+  {
+    "file_name": "images/29.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9959,
+      "produce": 0.0028,
+      "bakery": 0.0013
+    }
+  },
+  {
+    "file_name": "images/292.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0005,
+      "produce": 0.9895,
+      "bakery": 0.0101
+    }
+  },
+  {
+    "file_name": "images/304.jpg",
+    "predicted": "bakery",
+    "ground_truth": "bakery",
+    "probabilities": {
+      "packaged": 0.0003,
+      "produce": 0.0515,
+      "bakery": 0.9482
+    }
+  },
+  {
+    "file_name": "images/31.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9965,
+      "produce": 0.0027,
+      "bakery": 0.0008
+    }
+  },
+  {
+    "file_name": "images/311.jpg",
+    "predicted": "bakery",
+    "ground_truth": "bakery",
+    "probabilities": {
+      "packaged": 0.1479,
+      "produce": 0.0239,
+      "bakery": 0.8282
+    }
+  },
+  {
+    "file_name": "images/316.jpg",
+    "predicted": "bakery",
+    "ground_truth": "bakery",
+    "probabilities": {
+      "packaged": 0.0024,
+      "produce": 0.0017,
+      "bakery": 0.9959
+    }
+  },
+  {
+    "file_name": "images/319.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9965,
+      "produce": 0.0028,
+      "bakery": 0.0007
+    }
+  },
+  {
+    "file_name": "images/324.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9967,
+      "produce": 0.0018,
+      "bakery": 0.0015
+    }
+  },
+  {
+    "file_name": "images/336.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9984,
+      "produce": 0.0009,
+      "bakery": 0.0007
+    }
+  },
+  {
+    "file_name": "images/343.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9979,
+      "produce": 0.0006,
+      "bakery": 0.0015
+    }
+  },
+  {
+    "file_name": "images/344.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.98,
+      "produce": 0.0019,
+      "bakery": 0.0182
+    }
+  },
+  {
+    "file_name": "images/346.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9984,
+      "produce": 0.0011,
+      "bakery": 0.0005
+    }
+  },
+  {
+    "file_name": "images/366.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9985,
+      "produce": 0.0008,
+      "bakery": 0.0007
+    }
+  },
+  {
+    "file_name": "images/368.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9989,
+      "produce": 0.0006,
+      "bakery": 0.0006
+    }
+  },
+  {
+    "file_name": "images/389.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9989,
+      "produce": 0.0008,
+      "bakery": 0.0004
+    }
+  },
+  {
+    "file_name": "images/390.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9997,
+      "produce": 0.0002,
+      "bakery": 0.0001
+    }
+  },
+  {
+    "file_name": "images/392.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9995,
+      "produce": 0.0004,
+      "bakery": 0.0002
+    }
+  },
+  {
+    "file_name": "images/410.jpg",
+    "predicted": "packaged",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.9996,
+      "produce": 0.0002,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/411.jpg",
+    "predicted": "packaged",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.5223,
+      "produce": 0.3526,
+      "bakery": 0.1252
+    }
+  },
+  {
+    "file_name": "images/413.jpg",
+    "predicted": "produce",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.0289,
+      "produce": 0.9556,
+      "bakery": 0.0155
+    }
+  },
+  {
+    "file_name": "images/415.jpg",
+    "predicted": "packaged",
+    "ground_truth": "produce",
+    "probabilities": {
+      "packaged": 0.952,
+      "produce": 0.0159,
+      "bakery": 0.0321
+    }
+  },
+  {
+    "file_name": "images/49.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9992,
+      "produce": 0.0005,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/54.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9987,
+      "produce": 0.0005,
+      "bakery": 0.0007
+    }
+  },
+  {
+    "file_name": "images/57.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9993,
+      "produce": 0.0003,
+      "bakery": 0.0004
+    }
+  },
+  {
+    "file_name": "images/7.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9982,
+      "produce": 0.0012,
+      "bakery": 0.0006
+    }
+  },
+  {
+    "file_name": "images/73.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9994,
+      "produce": 0.0003,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/75.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9935,
+      "produce": 0.0025,
+      "bakery": 0.004
+    }
+  },
+  {
+    "file_name": "images/77.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9991,
+      "produce": 0.0004,
+      "bakery": 0.0005
+    }
+  },
+  {
+    "file_name": "images/91.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9986,
+      "produce": 0.001,
+      "bakery": 0.0005
+    }
+  },
+  {
+    "file_name": "images/96.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9996,
+      "produce": 0.0001,
+      "bakery": 0.0003
+    }
+  },
+  {
+    "file_name": "images/97.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9997,
+      "produce": 0.0001,
+      "bakery": 0.0002
+    }
+  },
+  {
+    "file_name": "images/99.jpg",
+    "predicted": "packaged",
+    "ground_truth": "packaged",
+    "probabilities": {
+      "packaged": 0.9996,
+      "produce": 0.0001,
+      "bakery": 0.0002
+    }
+  }
+]

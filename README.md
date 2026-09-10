@@ -28,9 +28,9 @@ Point the `datasets:` block of `config.yaml` at your three dataset roots:
 
 ```yaml
 datasets:
-  donation_type: {format: yolo,        root: /work/.../yolo_donation_type}
-  defects:       {format: yolo,        root: /work/.../yolo_defect}
-  freshness:     {format: imagefolder, root: /work/.../yolo_produce}
+  donation_type: {format: yolo,        root: /work/.../donation_type}
+  defects:       {format: yolo,        root: /work/.../defect}
+  freshness:     {format: imagefolder, root: /work/.../produce}
 ```
 
 - **yolo** roots need the Ultralytics `data.yaml` (class names are read
@@ -76,6 +76,39 @@ To evaluate on the ResNet held-out split for the head-to-head table, either
 set `splits: [test]` on the freshness dataset (if your ImageFolder tree has
 split directories) or set `paths.subset_manifest` to a file of test-split
 filenames — then re-run into a different `output_dir`.
+
+## ResNet-18 classification baselines
+
+The VLMs answer image-level classification questions, so the fair CNN
+comparison is an image-level classifier, not the YOLO detectors.
+`src/train_resnet.py` trains ResNet-18 on any task using the same
+image-level ground truth as the VLM benchmark (labels come through
+`src.data_loading.load_task`, so the head-to-head tables share identical
+labels): donation_type and freshness are single-label cross-entropy;
+defects is multi-label BCE with per-class pos_weight and greedy iterative
+stratification so every scarce defect appears in each split.
+
+```bash
+# check the stratified 70/15/15 split before training (no torch needed)
+python -m src.train_resnet config.yaml --task donation_type --dry-run
+
+# train (Nova)
+sbatch slurm/train_resnet.sbatch donation_type
+sbatch slurm/train_resnet.sbatch defects
+```
+
+Protocol matches the locked freshness run: ResNet-18 ImageNet weights,
+224x224, Adam 1e-4, seed 42, best checkpoint by val macro-F1, metrics on
+the held-out test split. Outputs land in `results/resnet_{task}/`:
+`best.pt`, `training_history.json`, `test_predictions.json`,
+`test_metrics.json`, an analyzer-style summary CSV, and
+`test_manifest.txt`.
+
+For the head-to-head table, uncomment the task's `subset_manifest:` line
+in `config.yaml` (pointing at that `test_manifest.txt`) and re-run the
+VLM benchmark into a fresh `output_dir` — the VLMs are then scored on
+exactly the ResNet held-out images. `subset_manifest` under a dataset
+entry overrides the global `paths.subset_manifest` for that task only.
 
 ## Analyze
 

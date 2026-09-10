@@ -1,0 +1,4 @@
+model,task,class,precision,recall,f1,support,accuracy,macro_f1
+resnet18,donation_type,packaged,0.8919,1.0000,0.9429,33,0.9365,0.9543
+resnet18,donation_type,produce,1.0000,0.8519,0.9200,27,0.9365,0.9543
+resnet18,donation_type,bakery,1.0000,1.0000,1.0000,3,0.9365,0.9543

@@ -1,0 +1,56 @@
+{
+  "subset_accuracy": 0.84,
+  "macro_f1": 0.6666666666666666,
+  "per_defect": {
+    "wrinkling": {
+      "sensitivity": 0.5,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 0.6666666666666666,
+      "support": 2
+    },
+    "visible_cut": {
+      "sensitivity": 0.5,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 0.6666666666666666,
+      "support": 2
+    },
+    "bruising": {
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "support": 1
+    },
+    "discoloration": {
+      "sensitivity": 1.0,
+      "specificity": 0.9130434782608695,
+      "precision": 0.5,
+      "f1": 0.6666666666666666,
+      "support": 2
+    },
+    "leaking": {
+      "sensitivity": 0.0,
+      "specificity": 1.0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
+    "mold": {
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "support": 1
+    }
+  },
+  "task": "defects",
+  "n_test": 25,
+  "best_epoch": 28,
+  "seed": 42,
+  "epochs_trained": 40,
+  "lr": 0.0001,
+  "batch_size": 32,
+  "checkpoint_selection": "val_macro_f1"
+}

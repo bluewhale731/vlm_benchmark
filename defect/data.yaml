@@ -1,0 +1,20 @@
+# Dataset configuration for Packaged Bakery Detection
+
+train: /work/mech-ai-scratch/anneka/food/produce/train.txt
+val: /work/mech-ai-scratch/anneka/food/produce/val.txt   # optional (recommended)
+test: /work/mech-ai-scratch/anneka/food/produce/test.txt # optional
+
+# Number of classes
+nc: 9
+
+# Class names
+names:
+  0: fresh
+  1: edible_soon
+  2: spoiled
+  3: mold
+  4: visible_cut
+  5: leaking
+  6: discoloration
+  7: bruising
+  8: wrinkling
