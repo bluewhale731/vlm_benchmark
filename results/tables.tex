@@ -1,0 +1,173 @@
+\begin{table}[!htbp]
+\centering
+\caption{Produce freshness classification across models and prompting strategies.}
+\label{tab:freshness_models}
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Strategy} & \textbf{Acc.} & \textbf{Macro-F1} & \textbf{Spoiled Rec.} & \textbf{Spoiled Prec.} \\
+\midrule
+internvl3\_8b & freeform\_brutal\_critic & 42.5\% & 0.394 & 27.3\% & 42.9\% \\
+internvl3\_8b & freeform\_indifferent\_critic & 56.9\% & 0.400 & 9.1\% & 42.9\% \\
+internvl3\_8b & freeform\_inspector & 56.3\% & 0.409 & 93.9\% & 36.5\% \\
+internvl3\_8b & freeform\_neutral & 58.6\% & 0.406 & 15.2\% & 50.0\% \\
+internvl3\_8b & freeform\_nice\_critic & 56.3\% & 0.344 & 0.0\% & 0.0\% \\
+internvl3\_8b & logit\_cascade & 56.9\% & 0.498 & 36.4\% & 57.1\% \\
+llama32\_11b\_vision & freeform\_brutal\_critic & 35.1\% & 0.260 & 0.0\% & 0.0\% \\
+llama32\_11b\_vision & freeform\_indifferent\_critic & 32.2\% & 0.255 & 3.0\% & 100.0\% \\
+llama32\_11b\_vision & freeform\_inspector & 48.9\% & 0.386 & 39.4\% & 27.1\% \\
+llama32\_11b\_vision & freeform\_neutral & 48.9\% & 0.341 & 3.0\% & 100.0\% \\
+llama32\_11b\_vision & freeform\_nice\_critic & 51.1\% & 0.347 & 0.0\% & 0.0\% \\
+llama32\_11b\_vision & logit\_cascade & 50.6\% & 0.384 & 9.1\% & 60.0\% \\
+llava15\_7b & freeform\_brutal\_critic & 56.3\% & 0.385 & 69.7\% & 32.9\% \\
+llava15\_7b & freeform\_indifferent\_critic & 53.4\% & 0.385 & 100.0\% & 33.0\% \\
+llava15\_7b & freeform\_inspector & 54.0\% & 0.385 & 90.9\% & 32.3\% \\
+llava15\_7b & freeform\_neutral & 58.1\% & 0.344 & 30.3\% & 29.4\% \\
+llava15\_7b & freeform\_nice\_critic & 60.9\% & 0.311 & 12.1\% & 36.4\% \\
+llava15\_7b & logit\_cascade & 36.8\% & 0.386 & 45.5\% & 48.4\% \\
+qwen25\_vl\_7b & freeform\_brutal\_critic & 43.7\% & 0.378 & 15.2\% & 45.5\% \\
+qwen25\_vl\_7b & freeform\_indifferent\_critic & 54.6\% & 0.313 & 0.0\% & 0.0\% \\
+qwen25\_vl\_7b & freeform\_inspector & 60.9\% & 0.463 & 42.4\% & 36.8\% \\
+qwen25\_vl\_7b & freeform\_neutral & 60.9\% & 0.310 & 0.0\% & 0.0\% \\
+qwen25\_vl\_7b & freeform\_nice\_critic & 56.9\% & 0.310 & 0.0\% & 0.0\% \\
+qwen25\_vl\_7b & logit\_cascade & 61.5\% & 0.357 & 3.0\% & 100.0\% \\
+qwen2\_vl\_7b & freeform\_brutal\_critic & 62.1\% & 0.443 & 75.8\% & 44.6\% \\
+qwen2\_vl\_7b & freeform\_indifferent\_critic & 64.9\% & 0.471 & 42.4\% & 60.9\% \\
+qwen2\_vl\_7b & freeform\_inspector & 66.1\% & 0.462 & 87.9\% & 44.6\% \\
+qwen2\_vl\_7b & freeform\_neutral & 66.1\% & 0.439 & 36.4\% & 66.7\% \\
+qwen2\_vl\_7b & freeform\_nice\_critic & 62.6\% & 0.343 & 6.1\% & 100.0\% \\
+qwen2\_vl\_7b & logit\_cascade & 56.3\% & 0.507 & 48.5\% & 64.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{Donation category identification accuracy.}
+\label{tab:donation_models}
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Model} & \textbf{Strategy} & \textbf{Acc.} & \textbf{Macro-F1} \\
+\midrule
+internvl3\_8b & freeform\_brutal\_critic & 95.2\% & 0.891 \\
+internvl3\_8b & freeform\_indifferent\_critic & 95.7\% & 0.901 \\
+internvl3\_8b & freeform\_neutral & 97.6\% & 0.943 \\
+internvl3\_8b & freeform\_nice\_critic & 96.1\% & 0.908 \\
+internvl3\_8b & logit\_multichoice & 95.7\% & 0.895 \\
+llama32\_11b\_vision & freeform\_brutal\_critic & 96.1\% & 0.916 \\
+llama32\_11b\_vision & freeform\_indifferent\_critic & 94.7\% & 0.849 \\
+llama32\_11b\_vision & freeform\_neutral & 93.7\% & 0.809 \\
+llama32\_11b\_vision & freeform\_nice\_critic & 96.9\% & 0.933 \\
+llama32\_11b\_vision & logit\_multichoice & 96.4\% & 0.930 \\
+llava15\_7b & freeform\_brutal\_critic & 82.8\% & 0.675 \\
+llava15\_7b & freeform\_indifferent\_critic & 85.3\% & 0.711 \\
+llava15\_7b & freeform\_neutral & 84.8\% & 0.630 \\
+llava15\_7b & freeform\_nice\_critic & 82.6\% & 0.673 \\
+llava15\_7b & logit\_multichoice & 52.2\% & 0.229 \\
+qwen25\_vl\_7b & freeform\_brutal\_critic & 92.3\% & 0.857 \\
+qwen25\_vl\_7b & freeform\_indifferent\_critic & 97.8\% & 0.951 \\
+qwen25\_vl\_7b & freeform\_neutral & 93.5\% & 0.934 \\
+qwen25\_vl\_7b & freeform\_nice\_critic & 98.1\% & 0.962 \\
+qwen25\_vl\_7b & logit\_multichoice & 89.9\% & 0.809 \\
+qwen2\_vl\_7b & freeform\_brutal\_critic & 94.4\% & 0.726 \\
+qwen2\_vl\_7b & freeform\_indifferent\_critic & 94.4\% & 0.726 \\
+qwen2\_vl\_7b & freeform\_neutral & 93.7\% & 0.743 \\
+qwen2\_vl\_7b & freeform\_nice\_critic & 94.7\% & 0.749 \\
+qwen2\_vl\_7b & logit\_multichoice & 97.1\% & 0.931 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{Zero-shot per-defect $F_1$ by model (freeform\_brutal\_critic). Defects with no annotated positives are omitted.}
+\label{tab:defects_f1_freeform_brutal_critic}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Defect} & \textbf{internvl3\_8b} & \textbf{llama32\_11b\_vision} & \textbf{llava15\_7b} & \textbf{qwen25\_vl\_7b} & \textbf{qwen2\_vl\_7b} \\
+\midrule
+wrinkling & 0.320 & 0.419 & 0.400 & 0.062 & 0.471 \\
+visible\_cut & 0.667 & 0.286 & 0.279 & 0.526 & 0.267 \\
+bruising & 0.267 & 0.091 & 0.210 & 0.286 & 0.303 \\
+discoloration & 0.556 & 0.517 & 0.400 & 0.571 & 0.452 \\
+mold & 0.333 & 0.857 & 0.118 & 0.667 & 0.000 \\
+\midrule
+Macro-$F_1$ & 0.428 & 0.434 & 0.281 & 0.422 & 0.298 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{Zero-shot per-defect $F_1$ by model (freeform\_indifferent\_critic). Defects with no annotated positives are omitted.}
+\label{tab:defects_f1_freeform_indifferent_critic}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Defect} & \textbf{internvl3\_8b} & \textbf{llama32\_11b\_vision} & \textbf{llava15\_7b} & \textbf{qwen25\_vl\_7b} & \textbf{qwen2\_vl\_7b} \\
+\midrule
+wrinkling & 0.167 & 0.438 & 0.321 & 0.067 & 0.276 \\
+visible\_cut & 0.667 & 0.235 & 0.491 & 0.727 & 0.267 \\
+bruising & 0.250 & 0.000 & 0.250 & 0.316 & 0.294 \\
+discoloration & 0.596 & 0.619 & 0.456 & 0.462 & 0.518 \\
+mold & 0.333 & 0.857 & 0.136 & 0.667 & 0.000 \\
+\midrule
+Macro-$F_1$ & 0.403 & 0.430 & 0.331 & 0.448 & 0.271 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{Zero-shot per-defect $F_1$ by model (free-form list strategy). Defects with no annotated positives are omitted.}
+\label{tab:defects_f1_freeform_list}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Defect} & \textbf{internvl3\_8b} & \textbf{llama32\_11b\_vision} & \textbf{llava15\_7b} & \textbf{qwen25\_vl\_7b} & \textbf{qwen2\_vl\_7b} \\
+\midrule
+wrinkling & 0.276 & 0.269 & 0.421 & 0.000 & 0.182 \\
+visible\_cut & 0.762 & 0.424 & 0.357 & 0.353 & 0.267 \\
+bruising & 0.231 & 0.105 & 0.196 & 0.300 & 0.312 \\
+discoloration & 0.625 & 0.545 & 0.448 & 0.500 & 0.611 \\
+mold & 0.000 & 0.800 & 0.170 & 0.400 & 0.667 \\
+\midrule
+Macro-$F_1$ & 0.379 & 0.429 & 0.319 & 0.311 & 0.408 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{Zero-shot per-defect $F_1$ by model (freeform\_nice\_critic). Defects with no annotated positives are omitted.}
+\label{tab:defects_f1_freeform_nice_critic}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Defect} & \textbf{internvl3\_8b} & \textbf{llama32\_11b\_vision} & \textbf{llava15\_7b} & \textbf{qwen25\_vl\_7b} & \textbf{qwen2\_vl\_7b} \\
+\midrule
+wrinkling & 0.000 & 0.186 & 0.324 & 0.000 & 0.095 \\
+visible\_cut & 0.632 & 0.083 & 0.400 & 0.267 & 0.267 \\
+bruising & 0.133 & 0.210 & 0.200 & 0.000 & 0.286 \\
+discoloration & 0.526 & 0.579 & 0.216 & 0.273 & 0.480 \\
+mold & 0.000 & 1.000 & 0.154 & 0.400 & 0.400 \\
+\midrule
+Macro-$F_1$ & 0.258 & 0.412 & 0.259 & 0.188 & 0.305 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\caption{Zero-shot per-defect $F_1$ by model (per-defect likelihood strategy, fixed threshold $p \geq 0.50$). Defects with no annotated positives are omitted.}
+\label{tab:defects_f1_logit_per_defect}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Defect} & \textbf{internvl3\_8b} & \textbf{llama32\_11b\_vision} & \textbf{llava15\_7b} & \textbf{qwen25\_vl\_7b} & \textbf{qwen2\_vl\_7b} \\
+\midrule
+wrinkling & 0.275 & 0.324 & 0.424 & 0.000 & 0.246 \\
+visible\_cut & 0.564 & 0.762 & 0.526 & 0.600 & 0.560 \\
+bruising & 0.240 & 0.270 & 0.267 & 0.210 & 0.227 \\
+discoloration & 0.638 & 0.667 & 0.426 & 0.400 & 0.564 \\
+mold & 0.462 & 0.600 & 0.222 & 0.667 & 0.533 \\
+\midrule
+Macro-$F_1$ & 0.436 & 0.525 & 0.373 & 0.375 & 0.426 \\
+\bottomrule
+\end{tabular}
+\end{table}

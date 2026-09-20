@@ -7,7 +7,7 @@ datasets:
     # subset_manifest: results/resnet_donation_type/test_manifest.txt
   defects:
     format: yolo
-    root: obj_train_data
+    root: /work/mech-ai-scratch/anneka/food/vlm_benchmark/defect/obj_train_data
     splits: null
     # subset_manifest: results/resnet_defects/test_manifest.txt
   freshness:
@@ -54,8 +54,8 @@ models:
 
 tasks:
   donation_type:
-    strategies: [freeform_neutral, logit_multichoice]
+    strategies: [freeform_neutral, logit_multichoice, freeform_brutal_critic, freeform_indifferent_critic, freeform_nice_critic]
   freshness:
-    strategies: [freeform_neutral, freeform_inspector, logit_cascade]
+    strategies: [freeform_neutral, freeform_inspector, logit_cascade, freeform_brutal_critic, freeform_indifferent_critic, freeform_nice_critic]
   defects:
-    strategies: [freeform_list, logit_per_defect]
+    strategies: [freeform_list, logit_per_defect, freeform_brutal_critic, freeform_indifferent_critic, freeform_nice_critic]

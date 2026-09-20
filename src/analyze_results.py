@@ -3,13 +3,18 @@
 Outputs (under results/):
   summary_single_label.csv     accuracy / macro-F1 / per-class P,R,F1 and
                                spoiled recall for donation_type + freshness
-  summary_defects.csv          per-defect sensitivity + specificity per
-                               model x strategy
+  summary_defects.csv          per-defect precision / recall / F1 per
+                               model x strategy, plus a macro-F1 row
   mcnemar_freshness.csv        exact McNemar tests between strategies
                                within each model (freshness task)
-  tau_sweep.csv                cascade accuracy / spoiled recall across
-                               (tau_spoil, tau_degrad) grid, per model
   tables.tex                   LaTeX versions of the main tables
+  f1_donation_type.csv         F1 only, one row per model x strategy:
+  f1_freshness.csv             macro-F1 plus the F1 of every class
+  f1_defects.csv               (or defect). One file per task.
+
+All metrics are computed from predicted labels against ground truth.
+Nothing here uses likelihood scores, threshold sweeps, AUROC or
+calibration.
 
 Usage:
     python -m src.analyze_results config.yaml
@@ -34,6 +39,15 @@ FRESHNESS_CLASSES = ["fresh", "edible_soon", "spoiled"]
 DONATION_CLASSES = ["packaged", "produce", "bakery"]
 DEFECT_CLASSES = ["wrinkling", "visible_cut", "bruising",
                   "discoloration", "leaking", "mold"]
+DEFECT_TAU = 0.50   # fixed decision threshold for likelihood scores; never tuned
+
+MODEL_ORDER = ["llava15_7b", "qwen2_vl_7b", "qwen25_vl_7b", "internvl3_8b",
+               "llama32_11b_vision"]
+STRATEGY_ORDER = ["freeform_neutral", "freeform_definitions",
+                  "freeform_inspector", "freeform_cot", "freeform_list",
+                  "freeform_brutal_critic", "freeform_indifferent_critic",
+                  "freeform_nice_critic",
+                  "logit_multichoice", "logit_cascade", "logit_per_defect"]
 
 
 def load_raw(raw_dir: Path) -> pd.DataFrame:
@@ -89,82 +103,60 @@ def single_label_summary(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ----------------------------------------------------------------
-# Defects: per-class sensitivity/specificity
+# Defects: per-defect precision / recall / F1 from predicted labels
 # ----------------------------------------------------------------
 def defects_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """One row per model x strategy x defect, plus a 'macro' row that
+    averages F1 over defects with at least one annotated positive
+    (leaking has none, so it never enters the average)."""
     out = []
     for (model, strat), g in df[df.task == "defects"].groupby(
             ["model", "strategy"]):
         g = g[g.pred.notna()]
+        # Score only images with at least one annotated defect, whether or
+        # not drop_empty_gt has been run on the raw files.
+        g = g[g["gt"].map(lambda v: bool(v) if isinstance(v, (list, tuple, set))
+                          else False)]
+        if g.empty:
+            continue
+        has_scores = "defect_scores" in g.columns
+        f1s = []
         for cls in DEFECT_CLASSES:
-            tp = fn = fp = tn = 0
+            tp = fn = fp = 0
             for _, r in g.iterrows():
                 truth = cls in (r["gt"] or [])
-                pred = cls in (r.pred or [])
+                scores = r.defect_scores if has_scores else None
+                if isinstance(scores, dict) and cls in scores:
+                    # likelihood strategy: label = score >= fixed 0.50
+                    pred = scores[cls] >= DEFECT_TAU
+                else:
+                    pred = cls in (r.pred or [])
                 tp += truth and pred
                 fn += truth and not pred
                 fp += pred and not truth
-                tn += (not truth) and (not pred)
             n_pos = tp + fn
+            if n_pos:
+                prec = tp / (tp + fp) if (tp + fp) else 0.0
+                rec = tp / n_pos
+                f1 = 2 * tp / (2 * tp + fp + fn)
+                f1s.append(f1)
+            else:                       # no positives: F1 undefined
+                prec = rec = f1 = np.nan
             out.append(dict(
-                model=model, strategy=strat, defect=cls,
-                annotated_count=n_pos,
-                sensitivity=round(tp / n_pos, 4) if n_pos else np.nan,
-                specificity=round(tn / (tn + fp), 4) if (tn + fp) else np.nan,
-                precision=round(tp / (tp + fp), 4) if (tp + fp) else np.nan,
-            ))
-    return pd.DataFrame(out)
-
-
-# ----------------------------------------------------------------
-# Defect threshold sweep (re-derives per-defect predictions from the
-# stored yes/no likelihood scores; no re-inference needed)
-# ----------------------------------------------------------------
-def defect_tau_sweep(df: pd.DataFrame) -> pd.DataFrame:
-    """For each model x defect, sweep tau over the stored logit scores and
-    report sensitivity/specificity at each threshold plus the best
-    operating point by Youden's J (sens + spec - 1)."""
-    out = []
-    g_all = df[(df.task == "defects") & (df.strategy == "logit_per_defect")]
-    taus = np.round(np.arange(0.05, 1.0, 0.05), 2)
-    for model, g in g_all.groupby("model"):
-        g = g[g.defect_scores.notna()]
-        if g.empty:
-            continue
-        for cls in DEFECT_CLASSES:
-            scores, truths = [], []
-            for _, r in g.iterrows():
-                s = (r.defect_scores or {}).get(cls)
-                if s is None:
-                    continue
-                scores.append(s)
-                truths.append(cls in (r["gt"] or []))
-            scores = np.asarray(scores)
-            truths = np.asarray(truths)
-            n_pos, n_neg = int(truths.sum()), int((~truths).sum())
-            if n_pos == 0:
-                continue
-            for t in taus:
-                pred = scores >= t
-                sens = float((pred & truths).sum() / n_pos)
-                spec = float((~pred & ~truths).sum() / n_neg) if n_neg else np.nan
-                out.append(dict(model=model, defect=cls, tau=t,
-                                n_pos=n_pos, n_neg=n_neg,
-                                sensitivity=round(sens, 4),
-                                specificity=round(spec, 4),
-                                youden_j=round(sens + (spec or 0) - 1, 4)))
-    return pd.DataFrame(out)
-
-
-def defect_calibrated_summary(sweep: pd.DataFrame) -> pd.DataFrame:
-    """Best operating point per model x defect by Youden's J."""
-    if sweep.empty:
-        return sweep
-    idx = sweep.groupby(["model", "defect"]).youden_j.idxmax()
-    best = sweep.loc[idx].rename(columns={"tau": "tau_star"})
-    return best[["model", "defect", "tau_star", "n_pos", "n_neg",
-                 "sensitivity", "specificity", "youden_j"]].sort_values(
-                     ["model", "defect"])
+                model=model, strategy=strat, defect=cls, n=len(g),
+                annotated_count=n_pos, tp=tp, fp=fp, fn=fn,
+                precision=round(prec, 4), recall=round(rec, 4),
+                f1=round(f1, 4)))
+        out.append(dict(
+            model=model, strategy=strat, defect="macro", n=len(g),
+            annotated_count=np.nan, tp=np.nan, fp=np.nan, fn=np.nan,
+            precision=np.nan, recall=np.nan,
+            f1=round(float(np.mean(f1s)), 4) if f1s else np.nan))
+    res = pd.DataFrame(out)
+    if not res.empty:
+        for c in ("annotated_count", "tp", "fp", "fn"):
+            res[c] = res[c].astype("Int64")
+    return res
 
 
 # ----------------------------------------------------------------
@@ -194,38 +186,59 @@ def mcnemar_freshness(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ----------------------------------------------------------------
-# Cascade threshold sweep (re-derives predictions from stored scores)
+# F1-only CSVs, one per task
 # ----------------------------------------------------------------
-def tau_sweep(df: pd.DataFrame) -> pd.DataFrame:
-    out = []
-    casc = df[(df.task == "freshness") & (df.strategy == "logit_cascade")
-              & df.get("s_spoil", pd.Series(dtype=float)).notna()]
-    taus = np.round(np.arange(0.05, 1.0, 0.05), 2)
-    for model, g in casc.groupby("model"):
-        s_spoil = g.s_spoil.to_numpy()
-        s_degrad = g.s_degrad.to_numpy()
-        gt = g["gt"].to_numpy()
-        for ts in taus:
-            for td in taus:
-                pred = np.where(s_spoil >= ts, "spoiled",
-                                np.where(s_degrad >= td, "edible_soon",
-                                         "fresh"))
-                acc = float((pred == gt).mean())
-                spoiled_mask = gt == "spoiled"
-                rec = (float((pred[spoiled_mask] == "spoiled").mean())
-                       if spoiled_mask.any() else np.nan)
-                out.append(dict(model=model, tau_spoil=ts, tau_degrad=td,
-                                accuracy=round(acc, 4),
-                                spoiled_recall=round(rec, 4),
-                                macro_f1=round(f1_score(
-                                    gt, pred, labels=FRESHNESS_CLASSES,
-                                    average="macro", zero_division=0), 4)))
-    return pd.DataFrame(out)
+def _ordered(df: pd.DataFrame) -> pd.DataFrame:
+    def rank(values, order):
+        return values.map(lambda v: order.index(v) if v in order
+                          else len(order))
+    return (df.assign(_m=rank(df.model, MODEL_ORDER),
+                      _s=rank(df.strategy, STRATEGY_ORDER))
+              .sort_values(["_m", "model", "_s", "strategy"])
+              .drop(columns=["_m", "_s"]).reset_index(drop=True))
+
+
+def f1_csvs(single: pd.DataFrame, defects: pd.DataFrame, res_dir: Path):
+    """Write f1_<task>.csv: model, strategy, n, macro_f1, then one F1
+    column per class (or per defect). Defects with no annotated positives
+    (leaking) get no column."""
+    for task, classes in (("donation_type", DONATION_CLASSES),
+                          ("freshness", FRESHNESS_CLASSES)):
+        sub = single[single.task == task] if not single.empty else single
+        if sub.empty:
+            print(f"[skip] f1_{task}.csv: no records")
+            continue
+        out = sub[["model", "strategy", "n", "macro_f1"]
+                  + [f"{c}_f1" for c in classes]]
+        out = out.rename(columns={f"{c}_f1": f"f1_{c}" for c in classes})
+        _ordered(out).to_csv(res_dir / f"f1_{task}.csv", index=False)
+        print(f"[out] f1_{task}.csv ({len(out)} rows)")
+
+    if defects.empty:
+        print("[skip] f1_defects.csv: no records")
+        return
+    wide = defects.pivot_table(index=["model", "strategy"], columns="defect",
+                               values="f1", dropna=False)
+    n = defects.groupby(["model", "strategy"]).n.first()
+    keep = [d for d in DEFECT_CLASSES
+            if d in wide.columns and wide[d].notna().any()]
+    out = pd.DataFrame({"n": n, "macro_f1": wide["macro"]})
+    for d in keep:
+        out[f"f1_{d}"] = wide[d]
+    out = _ordered(out.reset_index())
+    out.to_csv(res_dir / "f1_defects.csv", index=False)
+    print(f"[out] f1_defects.csv ({len(out)} rows)")
 
 
 # ----------------------------------------------------------------
 # LaTeX export
 # ----------------------------------------------------------------
+def tex(s) -> str:
+    """Escape underscores for LaTeX. Kept outside the f-strings because
+    Python < 3.12 does not allow a backslash inside an f-string expression."""
+    return str(s).replace("_", r"\_")
+
+
 def latex_tables(single: pd.DataFrame, defects: pd.DataFrame,
                  out_path: Path):
     parts = []
@@ -242,8 +255,8 @@ def latex_tables(single: pd.DataFrame, defects: pd.DataFrame,
                  r"\textbf{Spoiled Prec.} \\", r"\midrule"]
         for _, r in fresh.iterrows():
             lines.append(
-                f"{r.model.replace('_', r'\_')} & "
-                f"{r.strategy.replace('_', r'\_')} & "
+                f"{tex(r.model)} & "
+                f"{tex(r.strategy)} & "
                 f"{r.accuracy * 100:.1f}\\% & {r.macro_f1:.3f} & "
                 f"{r.spoiled_recall * 100:.1f}\\% & "
                 f"{r.spoiled_precision * 100:.1f}\\% \\\\")
@@ -259,29 +272,39 @@ def latex_tables(single: pd.DataFrame, defects: pd.DataFrame,
                  r"\textbf{Model} & \textbf{Strategy} & \textbf{Acc.} & "
                  r"\textbf{Macro-F1} \\", r"\midrule"]
         for _, r in don.iterrows():
-            lines.append(f"{r.model.replace('_', r'\_')} & "
-                         f"{r.strategy.replace('_', r'\_')} & "
+            lines.append(f"{tex(r.model)} & "
+                         f"{tex(r.strategy)} & "
                          f"{r.accuracy * 100:.1f}\\% & {r.macro_f1:.3f} \\\\")
         lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
         parts.append("\n".join(lines))
 
-    if not defects.empty:
-        lines = [r"\begin{table}[!htbp]", r"\centering",
-                 r"\caption{Zero-shot defect detection sensitivity by model "
-                 r"(logit per-defect strategy).}",
-                 r"\label{tab:defects_models}"]
-        piv = defects[defects.strategy == "logit_per_defect"].pivot_table(
-            index="defect", columns="model", values="sensitivity")
-        piv = piv.reindex(DEFECT_CLASSES)
+    strat_names = {"freeform_list": "free-form list strategy",
+                   "logit_per_defect": "per-defect likelihood strategy, "
+                                       "fixed threshold $p \\geq 0.50$"}
+    for strat in ([] if defects.empty else sorted(defects.strategy.unique())):
+        piv = defects[defects.strategy == strat].pivot_table(
+            index="defect", columns="model", values="f1")
+        piv = piv.reindex(DEFECT_CLASSES + ["macro"]).dropna(how="all")
+        if piv.empty:
+            continue
         cols = "l" + "c" * len(piv.columns)
-        lines += [rf"\begin{{tabular}}{{@{{}}{cols}@{{}}}}", r"\toprule"]
+        lines = [r"\begin{table}[!htbp]", r"\centering",
+                 r"\caption{Zero-shot per-defect $F_1$ by model ("
+                 + strat_names.get(strat, strat.replace("_", r"\_"))
+                 + r"). Defects with no annotated positives are omitted.}",
+                 rf"\label{{tab:defects_f1_{strat}}}",
+                 rf"\begin{{tabular}}{{@{{}}{cols}@{{}}}}", r"\toprule"]
         header = r"\textbf{Defect} & " + " & ".join(
-            rf"\textbf{{{c.replace('_', r'\_')}}}" for c in piv.columns)
+            rf"\textbf{{{tex(c)}}}" for c in piv.columns)
         lines += [header + r" \\", r"\midrule"]
         for defect, row in piv.iterrows():
-            cells = " & ".join("--" if pd.isna(v) else f"{v * 100:.1f}\\%"
+            if defect == "macro":
+                lines.append(r"\midrule")
+            name = "Macro-$F_1$" if defect == "macro" else defect.replace(
+                "_", r"\_")
+            cells = " & ".join("--" if pd.isna(v) else f"{v:.3f}"
                                for v in row)
-            lines.append(f"{defect.replace('_', r'\_')} & {cells} \\\\")
+            lines.append(f"{name} & {cells} \\\\")
         lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
         parts.append("\n".join(lines))
 
@@ -306,28 +329,11 @@ def main():
     defs.to_csv(res_dir / "summary_defects.csv", index=False)
     print(f"[out] summary_defects.csv ({len(defs)} rows)")
 
-    dsweep = defect_tau_sweep(df)
-    if not dsweep.empty:
-        dsweep.to_csv(res_dir / "defect_tau_sweep.csv", index=False)
-        dbest = defect_calibrated_summary(dsweep)
-        dbest.to_csv(res_dir / "summary_defects_calibrated.csv", index=False)
-        print(f"[out] defect_tau_sweep.csv ({len(dsweep)} rows), "
-              f"summary_defects_calibrated.csv ({len(dbest)} rows)")
-        print("\nCalibrated defect operating points (Youden's J):")
-        print(dbest.to_string(index=False))
-
     mn = mcnemar_freshness(df)
     mn.to_csv(res_dir / "mcnemar_freshness.csv", index=False)
     print(f"[out] mcnemar_freshness.csv ({len(mn)} rows)")
 
-    sweep = tau_sweep(df)
-    sweep.to_csv(res_dir / "tau_sweep.csv", index=False)
-    print(f"[out] tau_sweep.csv ({len(sweep)} rows)")
-    if not sweep.empty:
-        best = sweep.loc[sweep.groupby("model").macro_f1.idxmax()]
-        print("\nBest (tau_spoil, tau_degrad) per model by macro-F1:")
-        print(best[["model", "tau_spoil", "tau_degrad", "accuracy",
-                    "spoiled_recall", "macro_f1"]].to_string(index=False))
+    f1_csvs(single, defs, res_dir)
 
     latex_tables(single, defs, res_dir / "tables.tex")
     print("[out] tables.tex")

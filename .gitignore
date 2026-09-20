@@ -6,3 +6,8 @@ logs/
 *.pth
 *.bak
 *.gtbak
+*.errbak
+*.corrupt_bak
+*.gtbak
+config.yaml.bak
+config.yaml.critics
