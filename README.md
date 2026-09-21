@@ -1,8 +1,8 @@
-# VLM Food-Rescue Benchmark (ZeroWaste)
+# VLM Food-Rescue Benchmark
 
-Code and results for *Evaluating Vision–Language Models for Automated
-Quality Assessment of Food Donations* (Singh & Ayanlade). Zero-shot benchmark of 5 open-weight vision-language models on three
-image-level tasks from the ZeroWaste food-pantry dataset. Every VLM
+Code and results for *Evaluating Open-source Vision-Language Models for Automated Quality
+Assessment of Food Donations* (Singh & Ayanlade). Zero-shot benchmark of 5 open-weight vision-language models on three
+image-level tasks from the food-pantry dataset. Every VLM
 prediction is scored against human ground-truth annotations; the repo
 produces the evaluation tables in the manuscript.
 
@@ -15,7 +15,7 @@ produces the evaluation tables in the manuscript.
 | `defects` (multi-label) | bruising, discoloration, mold, visible_cut, wrinkling (leaking is also scored but has no positive images and is omitted from the paper) | freeform_list, logit_per_defect (one Yes/No likelihood per defect) |
 
 Models (`config.yaml`): LLaVA-1.5 7B, Qwen2-VL 7B, Qwen2.5-VL 7B,
-InternVL3 8B, Llama-3.2 11B-Vision (gated — `huggingface-cli login` first).
+InternVL3 8B, Llama-3.2 11B-Vision
 
 ## Ground-truth annotations
 
@@ -40,7 +40,7 @@ datasets:
                   coco_json: produce/instances_default_produce.json}
 ```
 
-Sanity-check loading before using GPU time:
+Check loading before running
 
 ```bash
 python -m src.data_loading config.yaml
@@ -69,8 +69,6 @@ Smoke test (5 images per cell, one model):
 python -m src.run_benchmark config.yaml --model llava15_7b --limit 5
 ```
 
-Full grid on Nova (SLURM):
-
 ```bash
 sbatch slurm/run_all.sbatch
 ```
@@ -88,7 +86,7 @@ python -m src.analyze_results config.yaml
 ## Results
 
 Individual VLM performance and evaluation
-Defect F1 at a fixed decision threshold (Table 5):
+Defect F1 at a fixed decision threshold:
 
 Each defect is predicted present when the normalized Yes/No probability
 from Eq. 1 is ≥ 0.50. The threshold is the same for every model and
